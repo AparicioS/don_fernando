@@ -9,7 +9,7 @@ class Cor {
   static Color titulo([double opacity = 1]) =>
       Color.fromRGBO(0, 0, 0, opacity);
   static Color cabecario([double opacity = 1]) =>
-      Color.fromRGBO(255, 140, 0, opacity);
+      Color.fromRGBO(240,230,140, opacity);
   static Color backgrud([double opacity = 1]) =>
       Color.fromRGBO(231, 244, 192, opacity);
   static Color botaoverde([double opacity = 1]) =>
@@ -26,7 +26,7 @@ class ScaffoldLayout extends Scaffold {
             appBar: AppBar(
               backgroundColor: Cor.cabecario(0.8),
               title: Center(
-                child: Text('Kaj Pub',
+                child: Text('Don Fernando',
                     style: TextStyle(color: Cor.titulo(), fontSize: 30)),
               ),
               actions: acoes,

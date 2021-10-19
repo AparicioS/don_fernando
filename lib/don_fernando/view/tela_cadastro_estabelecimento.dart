@@ -1,5 +1,3 @@
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:don_fernando/don_fernando/controller/controller_estabelecimento.dart';
 import 'package:don_fernando/don_fernando/model/estabelecimento.dart';
 import 'package:don_fernando/don_fernando/view/layout.dart';
@@ -13,31 +11,10 @@ class TelaCadastroEstabelecimento extends StatefulWidget {
 }
 
 class _TelaCadastroEstabelecimentoState extends State<TelaCadastroEstabelecimento> {
-  Estabelecimento estabelecimento;
-  String msg;
-
+  
   @override
   void initState() {
-    estabelecimento = Estabelecimento.novo();
-    estabelecimento.id = '123';
-    FirebaseFirestore.instance
-        .collection('Estabelecimento')
-        .doc(estabelecimento.id)
-        .get()
-        .then((value) {
-      setState(() {
-        if (value.id == estabelecimento.id) {
-          estabelecimento = Estabelecimento.fromDoc(value.data()); 
-          estabelecimento.id = value.id ;        
-          print(estabelecimento.id);
-          msg = 'ao alterar registro.';
-        } else {
-          print('ao incluir registro.');
-          print(estabelecimento.id);
-          msg = 'ao incluir registro.';
-        }
-      });
-    });
+    /* rever nessecidade */
     super.initState();
   }
 
@@ -67,8 +44,8 @@ class _TelaCadastroEstabelecimentoState extends State<TelaCadastroEstabeleciment
                 FilteringTextInputFormatter.deny(RegExp(r'\s')),
                 FilteringTextInputFormatter.digitsOnly
               ],
-              initialValue: estabelecimento.id ?? '',
-              onSaved: (valor) => estabelecimento.id = valor,
+              initialValue: Estabelecimento().id ?? '',
+              onSaved: (valor) => Estabelecimento().id = valor,
               validator: (valor) {
                 if (valor.isEmpty) {
                   return 'campo obrigatorio';
@@ -81,11 +58,8 @@ class _TelaCadastroEstabelecimentoState extends State<TelaCadastroEstabeleciment
             ),
             SizedBox(height: 30),
             TextFormField(
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
-              ],
-              initialValue: estabelecimento.descricao ?? '',
-              onSaved: (valor) => estabelecimento.descricao = valor,
+              initialValue: Estabelecimento().descricao ?? '',
+              onSaved: (valor) => Estabelecimento().descricao = valor,
               decoration: InputDecoration(labelText: "Nome/Identificação:"),
             ),
             SizedBox(height: 30),
@@ -93,22 +67,22 @@ class _TelaCadastroEstabelecimentoState extends State<TelaCadastroEstabeleciment
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
               ],
-              initialValue: estabelecimento.mensagem ?? '',
-              onSaved: (valor) => estabelecimento.mensagem = valor,
+              initialValue: Estabelecimento().mensagem ?? '',
+              onSaved: (valor) => Estabelecimento().mensagem = valor,
               decoration: InputDecoration(labelText: "Mensagem:"),
             ),
             SizedBox(height: 30),
             TextFormField(
               obscureText: true,
-              initialValue: estabelecimento.senha ?? '',
-              onSaved: (valor) => estabelecimento.senha = valor,
+              initialValue: Estabelecimento().senha ?? '',
+              onSaved: (valor) => Estabelecimento().senha = valor,
               decoration: InputDecoration(labelText: "Senha:"),
             ),
             SizedBox(height: 30),
             TextFormField(
               obscureText: true,
               validator: (valor) {
-                if (valor != estabelecimento.senha) {
+                if (valor != Estabelecimento().senha) {
                   return 'senha não confere';
                 }
                 return null;
@@ -124,7 +98,7 @@ class _TelaCadastroEstabelecimentoState extends State<TelaCadastroEstabeleciment
           onPressed: () async {
             if (form.currentState.validate()) {
               form.currentState.save();
-              var retorno = await ControllerEstabelecimento.cadastrarEstabelecimento(estabelecimento);              
+              var retorno = await ControllerEstabelecimento.cadastrarEstabelecimento(Estabelecimento());              
               Navigator.pop(context);
               print(retorno);
               showDialog(
@@ -132,7 +106,7 @@ class _TelaCadastroEstabelecimentoState extends State<TelaCadastroEstabeleciment
                   builder: (contx) {
                     return CupertinoAlertDialog(
                       title: Text('Estabelecimento'),
-                      content: Text(retorno + msg),
+                      content: Text(retorno),
                       actions: [
                         TextButton(
                             onPressed: () => Navigator.pop(contx),
