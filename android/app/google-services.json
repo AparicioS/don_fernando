@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "939894955131",
+    "project_id": "don-fernando-ticket",
+    "storage_bucket": "don-fernando-ticket.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:939894955131:android:d697ad2dc9e352de80d6de",
+        "android_client_info": {
+          "package_name": "br.com.u14bits.don_fernando"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "939894955131-kgotb5gmlon7isirotv9gnrvj9dhrii6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLByYopvK-ApitNhEySsP2LIz2oHBa-Kw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "939894955131-kgotb5gmlon7isirotv9gnrvj9dhrii6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
