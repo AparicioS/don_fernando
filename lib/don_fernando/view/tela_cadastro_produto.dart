@@ -1,8 +1,10 @@
 
+import 'package:don_fernando/don_fernando/controller/controller_produto.dart';
+import 'package:don_fernando/don_fernando/model/produto.dart';
 import 'package:don_fernando/don_fernando/view/layout.dart';
-import 'package:don_fernando/don_fernando/view/tela_pricipal.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class TelaCadastroProduto extends StatefulWidget {
   @override
@@ -10,116 +12,125 @@ class TelaCadastroProduto extends StatefulWidget {
 }
 
 class _TelaCadastroProdutoState extends State<TelaCadastroProduto> {
-  List<DropdownMenuItem> listaRegiao;
-  List<DropdownMenuItem> listaAlimentacao;
-  List<DropdownMenuItem> listaFinalidade;
-  //Produto Produto;
-  String msg;
+  Produto produto;
+  final List<String> _categorias = [
+    'Litro',
+    'Dose',
+    'Lata',
+    'Combo'
+  ];
+  List<DropdownMenuItem> listaCategoria;
 
   @override
   void initState() {
-   /* rebanho = Rebanho.novo();
-    FirebaseFirestore.instance
-        .collection('Rebanho')
-        .doc(Usuario().id)
-        .get()
-        .then((value) {
-      setState(() {
-        if (value.id == Usuario().id) {
-          rebanho = Rebanho.fromDoc(value.data());
-          msg = 'ao alterar registro.';
-        } else {
-          msg = 'ao incluir registro.';
-        }
-      });
-    });
-
-    FirebaseFirestore.instance
-        .collection('regiao')
-        .snapshots()
-        .listen((colecao) {
-      List<DropdownMenuItem> lista = colecao.docs
-          .map((doc) => DropdownMenuItem<String>(
-                child: Text(doc.id),
-                value: doc.id,
+    produto = Produto.novo();
+   listaCategoria = _categorias.map((doc) => DropdownMenuItem<String>(
+                child: Text(doc),
+                value: doc,
               ))
           .toList();
-      setState(() {
-        listaRegiao = lista;
-      });
-    });
-
-    FirebaseFirestore.instance
-        .collection('alimentacao')
-        .snapshots()
-        .listen((colecao) {
-      List<DropdownMenuItem> lista = colecao.docs
-          .map((doc) => DropdownMenuItem<String>(
-                child: Text(doc.id),
-                value: doc.id,
-              ))
-          .toList();
-      setState(() {
-        listaAlimentacao = lista;
-      });
-    });
-
-    FirebaseFirestore.instance
-        .collection('finalidade')
-        .snapshots()
-        .listen((colecao) {
-      List<DropdownMenuItem> lista = colecao.docs
-          .map((doc) => DropdownMenuItem<String>(
-                child: Text(doc.id),
-                value: doc.id,
-              ))
-          .toList();
-      setState(() {
-        listaFinalidade = lista;
-      });
-    });*/
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    var form = GlobalKey<FormState>();
     return ScaffoldLayout(
-      body: ListView(
-        children: [
-          Center(
-              child: Text(
-            "Dados do Produto",
-            style: TextStyle(fontSize: 30),
-          )),
-          SizedBox(height: 30),
-          TextField(
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-                labelText: "Codigo:",
-                hintText: 'informe o codigo para o Produto'),
-          ),
-          SizedBox(height: 30),
-          TextField(
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-                labelText: "Descrição:",
-                hintText: 'informe a Descrição para o Produto'),
-          ),
-          SizedBox(height: 30),
-          TextField(
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-                labelText: "Valor:",
-                hintText: 'informe o valor do Produto'),
-          ),
-        ],
+      body: Form(
+        key: form,
+        child: ListView(
+          children: [
+            SizedBox(
+              height: 60,
+              child: Center(
+                child: Title(
+                    title: 'Dados do Produto',
+                    color: Cor.titulo(),
+                    child: Text(
+                      "Dados do Produto",
+                      style: TextStyle(fontSize: 30),
+                    )),
+              ),
+            ),
+            DropdownButtonFormField<String>(
+              onSaved: (data) => produto.categoria = data,
+              decoration: InputDecoration(
+                  labelText: "Categoria:",
+                  contentPadding: EdgeInsets.all(10),
+                  counterStyle: TextStyle(color: Colors.red)),
+              items: listaCategoria,
+              onChanged: (value) => print("selecionado: $value"),
+            ),
+            SizedBox(height: 30),
+            TextFormField(
+              inputFormatters: [
+                FilteringTextInputFormatter.deny(RegExp(r'\s')),
+              ],
+              onSaved: (valor) => produto.id = valor,
+              validator: (valor) {
+                if (valor.isEmpty) {
+                  return 'campo obrigatorio';
+                }
+                return null;
+              },
+              autofocus: true,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: "Codigo:"),
+            ),
+            SizedBox(height: 30),
+            TextFormField(
+              onSaved: (valor) => produto.descricao = valor,
+              decoration: InputDecoration(labelText: "Nome/Identificação:"),
+            ),
+            SizedBox(height: 30),
+            TextFormField(
+              inputFormatters: [
+                FilteringTextInputFormatter.deny(RegExp(r'\s')),
+              ],
+              onSaved: (valor) => produto.valor= valor,
+              decoration: InputDecoration(labelText: "Valor:"),
+            ),
+            SizedBox(height: 30),
+            TextFormField(
+              onSaved: (valor) => produto.medida = valor,
+              decoration: InputDecoration(labelText: "Medida:"),
+            ),
+            SizedBox(height: 30),
+          ],
+        ),
       ),
       floatingActionButton: BotaoRodape(
-          onPressed: () {
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => TelaPricipal()));
-          },
-          child: Text("Salvar")),
+          child: Text("Salvar"),
+          onPressed: () async {
+            if (form.currentState.validate()) {
+              form.currentState.save();
+              var retorno = await ControllerProduto.cadastrarProduto(produto);
+              print(retorno);
+              showDialog(
+                context: context,
+                builder: (ctx) {
+                  return CupertinoAlertDialog(
+                    title: Text('Produto'),
+                    content: Text(retorno + 'ao incluir o registro...'),
+                    actions: [
+                      TextButton(
+                          onPressed: () {
+                            form.currentState.reset();
+                            Navigator.pop(ctx);
+                          },
+                          child: Text('Novo cadastro')),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.pop(ctx);
+                          },
+                          child: Text('OK'))
+                    ],
+                  );
+                });
+            }
+          }),
+          
     );
   }
 }
