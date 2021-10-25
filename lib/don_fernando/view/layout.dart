@@ -1,4 +1,8 @@
+import 'package:bluetooth_print/bluetooth_print_model.dart';
+import 'package:don_fernando/don_fernando/model/estabelecimento.dart';
+import 'package:don_fernando/don_fernando/model/produto.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Cor {
   static Color texto([double opacity = 1]) => Color.fromRGBO(0, 0, 0, opacity);
@@ -19,9 +23,15 @@ class Cor {
   static Color textoAzul([double opacity = 1]) =>
       Color.fromRGBO(0, 0, 250, opacity);
 }
+class Size{
+  static double sizeTextTitleList = 30;
+  static double sizeTextSubTitleList = 20;
+  static double sizeTextLeadingList = 30;
+  static double sizeTextTrailingList = 30;
+}
 
 class ScaffoldLayout extends Scaffold {
-  ScaffoldLayout({Widget body, acoes, floatingActionButton})
+  ScaffoldLayout({Widget body, acoes,botoes, floatingActionButton})
       : super(
             appBar: AppBar(
               backgroundColor: Cor.cabecario(0.8),
@@ -30,6 +40,7 @@ class ScaffoldLayout extends Scaffold {
                     style: TextStyle(color: Cor.titulo(), fontSize: 30)),
               ),
               actions: acoes,
+              bottom: botoes,
             ),
             body: Container(
                 decoration: BoxDecoration(
@@ -77,4 +88,18 @@ class AcaoTopo extends Container {
                 onPressed: onPressed),
           ),
         );
+}
+class Ticket{
+  static List<LineText> getTicket(Produto produto){
+    List<LineText> list = [];
+    list.add(LineText(align:LineText.ALIGN_CENTER ,width: 10,height: 10,type: LineText.TYPE_TEXT, x:10, y:10, content: Estabelecimento().descricao+"\n\n"));
+    list.add(LineText(align:LineText.ALIGN_CENTER ,width: 10,height: 10,type: LineText.TYPE_TEXT, x:10, y:10, content: produto.categoria+"\n"));
+    list.add(LineText(align:LineText.ALIGN_CENTER ,width: 10,height: 10,type: LineText.TYPE_TEXT, x:10, y:10, content: produto.descricao+"\n\n"));
+    list.add(LineText(align:LineText.ALIGN_CENTER ,type: LineText.TYPE_TEXT, x:10, y:10, content: Estabelecimento().mensagem+"\n\n"));
+    list.add(LineText(align:LineText.ALIGN_CENTER ,underline: 1,type: LineText.TYPE_TEXT, x:10, y:10, content:  DateFormat("dd/MM/yyyy").format(DateTime.now())));
+    list.add(LineText(type: LineText.TYPE_TEXT, x:10, y:10, content: "\n--------------------------------"));
+    list.add(LineText(type: LineText.TYPE_TEXT, x:10, y:10, content: "\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"));
+    list.add(LineText(type: LineText.TYPE_TEXT, x:10, y:10, content: "\n\n--------------------------------"));
+    return list;           
+  }
 }

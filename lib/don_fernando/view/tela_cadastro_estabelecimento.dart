@@ -72,24 +72,6 @@ class _TelaCadastroEstabelecimentoState extends State<TelaCadastroEstabeleciment
               decoration: InputDecoration(labelText: "Mensagem:"),
             ),
             SizedBox(height: 30),
-            TextFormField(
-              obscureText: true,
-              initialValue: Estabelecimento().senha ?? '',
-              onSaved: (valor) => Estabelecimento().senha = valor,
-              decoration: InputDecoration(labelText: "Senha:"),
-            ),
-            SizedBox(height: 30),
-            TextFormField(
-              obscureText: true,
-              validator: (valor) {
-                if (valor != Estabelecimento().senha) {
-                  return 'senha não confere';
-                }
-                return null;
-              },
-              decoration: InputDecoration(labelText: "Confirma Senha:"),
-            ),
-            SizedBox(height: 30),
           ],
         ),
       ),

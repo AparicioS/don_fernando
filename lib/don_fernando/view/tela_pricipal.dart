@@ -3,6 +3,8 @@ import 'package:don_fernando/don_fernando/view/layout.dart';
 import 'package:don_fernando/don_fernando/view/tela_cadastro_estabelecimento.dart';
 import 'package:don_fernando/don_fernando/view/tela_cadastro_estoque.dart';
 import 'package:don_fernando/don_fernando/view/tela_cadastro_produto.dart';
+import 'package:don_fernando/don_fernando/view/tela_conecta_impressora.dart';
+import 'package:don_fernando/don_fernando/view/tela_ticket.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -20,9 +22,11 @@ class TelaPricipal extends StatelessWidget {
       body: Column(
         children: [
           AcaoTopo(
-              icone: Icons.logout,
-              texto: 'sair',
-              onPressed: () => {}),
+              icone: Icons.print,
+              texto: 'impressora',
+              onPressed: () => {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (_) => TelaConectaImpressora()))}),
             Container(
               padding: EdgeInsets.only(left: 15),
               alignment: Alignment.topLeft,
@@ -101,7 +105,7 @@ class TelaPricipal extends StatelessWidget {
                       style: TextButton.styleFrom(primary: Cor.texto()),
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (_) => TelaCadastroEstuque()));
+                            builder: (_) => TelaTicket()));
                       },
                       child: Align(
                           alignment: Alignment.bottomCenter,

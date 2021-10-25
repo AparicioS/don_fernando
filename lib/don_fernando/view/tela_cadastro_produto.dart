@@ -13,18 +13,30 @@ class TelaCadastroProduto extends StatefulWidget {
 
 class _TelaCadastroProdutoState extends State<TelaCadastroProduto> {
   Produto produto;
+  List<DropdownMenuItem> listaCategoria;
+  List<DropdownMenuItem> listaUnidade;
   final List<String> _categorias = [
     'Litro',
     'Dose',
     'Lata',
     'Combo'
   ];
-  List<DropdownMenuItem> listaCategoria;
+  final List<String> _listaUnidade = [
+    'unidade',
+    'lista',
+    'fracionado'
+  ];
+
 
   @override
   void initState() {
     produto = Produto.novo();
-   listaCategoria = _categorias.map((doc) => DropdownMenuItem<String>(
+    listaCategoria = _categorias.map((doc) => DropdownMenuItem<String>(
+                child: Text(doc),
+                value: doc,
+              ))
+          .toList();
+    listaUnidade = _listaUnidade.map((doc) => DropdownMenuItem<String>(
                 child: Text(doc),
                 value: doc,
               ))
@@ -54,6 +66,12 @@ class _TelaCadastroProdutoState extends State<TelaCadastroProduto> {
             ),
             DropdownButtonFormField<String>(
               onSaved: (data) => produto.categoria = data,
+              validator: (valor) {
+                if (valor.isEmpty) {
+                  return 'campo obrigatorio';
+                }
+                return null;
+              },
               decoration: InputDecoration(
                   labelText: "Categoria:",
                   contentPadding: EdgeInsets.all(10),
@@ -63,23 +81,13 @@ class _TelaCadastroProdutoState extends State<TelaCadastroProduto> {
             ),
             SizedBox(height: 30),
             TextFormField(
-              inputFormatters: [
-                FilteringTextInputFormatter.deny(RegExp(r'\s')),
-              ],
-              onSaved: (valor) => produto.id = valor,
+              onSaved: (valor) => produto.descricao = valor,
               validator: (valor) {
                 if (valor.isEmpty) {
                   return 'campo obrigatorio';
                 }
                 return null;
               },
-              autofocus: true,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: "Codigo:"),
-            ),
-            SizedBox(height: 30),
-            TextFormField(
-              onSaved: (valor) => produto.descricao = valor,
               decoration: InputDecoration(labelText: "Nome/Identificação:"),
             ),
             SizedBox(height: 30),
@@ -88,12 +96,29 @@ class _TelaCadastroProdutoState extends State<TelaCadastroProduto> {
                 FilteringTextInputFormatter.deny(RegExp(r'\s')),
               ],
               onSaved: (valor) => produto.valor= valor,
+              validator: (valor) {
+                if (valor.isEmpty) {
+                  return 'campo obrigatorio';
+                }
+                return null;
+              },
               decoration: InputDecoration(labelText: "Valor:"),
             ),
-            SizedBox(height: 30),
-            TextFormField(
-              onSaved: (valor) => produto.medida = valor,
-              decoration: InputDecoration(labelText: "Medida:"),
+            SizedBox(height: 30),            
+            DropdownButtonFormField<String>(
+              onSaved: (data) => produto.unidade = data,
+              validator: (valor) {
+                if (valor.isEmpty) {
+                  return 'campo obrigatorio';
+                }
+                return null;
+              },
+              decoration: InputDecoration(
+                  labelText: "Unidade:",
+                  contentPadding: EdgeInsets.all(10),
+                  counterStyle: TextStyle(color: Colors.red)),
+              items: listaUnidade,
+              onChanged: (value) => print("selecionado: $value"),
             ),
             SizedBox(height: 30),
           ],

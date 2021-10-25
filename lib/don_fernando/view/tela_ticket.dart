@@ -5,13 +5,21 @@ import 'package:don_fernando/don_fernando/view/tela_cadastro_estoque_produto.dar
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class TelaCadastroEstuque extends StatefulWidget {
+class TelaTicket extends StatefulWidget {
   @override
-  _TelaCadastroEstuqueState createState() => _TelaCadastroEstuqueState();
+  _TelaTicketState createState() => _TelaTicketState();
 }
 
-class _TelaCadastroEstuqueState extends State<TelaCadastroEstuque> {
+class _TelaTicketState extends State<TelaTicket> {
   List<Estoque> estoques = [];
+  List<Estoque> estoquesTodos = [];
+  List<TextButton> listaCategoria;
+  final List<String> _categorias = [
+    'Litro',
+    'Dose',
+    'Lata',
+    'Combo'
+  ];
 
   @override
   void initState() {    
@@ -19,14 +27,23 @@ class _TelaCadastroEstuqueState extends State<TelaCadastroEstuque> {
     ControllerEstoque.buscarEstoques()
     .then((value) => setState(() {
         estoques = value;
+        estoquesTodos = value;
     }));
     
     super.initState();
+    
+    listaCategoria = _categorias.map((doc) => 
+                     TextButton( onPressed: ()=>setState(() {
+                       estoques = estoquesTodos.where((element) => element.produto.categoria == doc ).toList();
+                       }),
+                    child: Text(doc))).toList();
   }
+
 
   @override
   Widget build(BuildContext context) {
-    return ScaffoldLayout(      
+    return ScaffoldLayout(
+      acoes: listaCategoria,
       body: ListView(
         children: [
           Center(
