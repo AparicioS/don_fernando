@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:don_fernando/don_fernando/model/estabelecimento.dart';
+import 'package:flutter/material.dart';
 
 class Produto {
   String id;
@@ -6,7 +8,7 @@ class Produto {
   String descricao;
   String valor;
   String unidade;
-  String composicao;
+  Map composicao;
 
   Produto.novo();
 
@@ -44,4 +46,20 @@ class Produto {
       this.composicao = map['composicao'];
     }
   }  
+  static getDropdownMenuCategorias(){
+        return Estabelecimento().categoria.map((doc) => DropdownMenuItem<String>(
+                child: Text(doc),
+                value: doc,
+              ))
+          .toList();
+          
+  }static getDropdownMenuUnidade(){
+        return ["Unidade",
+			          "Lista",
+			          "Fracionado"].map((doc) => DropdownMenuItem<String>(
+                child: Text(doc),
+                value: doc,
+              ))
+          .toList();
+  }
 }

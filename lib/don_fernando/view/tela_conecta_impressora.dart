@@ -23,7 +23,17 @@ class _TelaConectaImpressoraState extends State<TelaConectaImpressora> {
     WidgetsBinding.instance.addPostFrameCallback((_) => initBluetooth());
     super.initState();
   }
+String removerAcentos(String str) {
 
+  var comAcento = 'ÀÁÂÃÄÅàáâãäåÒÓÔÕÕÖØòóôõöøÈÉÊËèéêëðÇçÐÌÍÎÏìíîïÙÚÛÜùúûüÑñŠšŸÿýŽž';
+  var semAcento = 'AAAAAAaaaaaaOOOOOOOooooooEEEEeeeeeCcDIIIIiiiiUUUUuuuuNnSsYyyZz'; 
+
+  for (int i = 0; i < comAcento.length; i++) {      
+    str = str.replaceAll(comAcento[i], semAcento[i]);
+  }
+
+  return str;
+}
   Future<void> initBluetooth() async {
     bluetoothPrint.startScan(timeout: Duration(seconds: 4));
 
@@ -54,6 +64,7 @@ class _TelaConectaImpressoraState extends State<TelaConectaImpressora> {
 
     if(isConnected) {
       setState(() {
+        tips = 'conectado '+ _device.name;
         _connected=true;
       });
     }
@@ -138,13 +149,13 @@ class _TelaConectaImpressoraState extends State<TelaConectaImpressora> {
                           child: Text('teste de impressão'),
                           onPressed:  _connected?() async {
                             Map<String, dynamic> config = Map();
-                            config['width'] = 160; 
-                            config['height'] = 190; 
-                            config['gap'] = 10; 
+                            config['width'] = 40; 
+                            config['height'] = 70; 
+                            config['gap'] = 2; 
                             List<LineText> list = [];
                             list.add(LineText(align:LineText.ALIGN_CENTER ,width: 10,height: 10,type: LineText.TYPE_TEXT, x:10, y:10, content: Estabelecimento().descricao+"\n\n"));
-                            list.add(LineText(align:LineText.ALIGN_CENTER ,width: 10,height: 10,type: LineText.TYPE_TEXT, x:10, y:10, content: "Teste \n"));
-                            list.add(LineText(align:LineText.ALIGN_CENTER ,width: 10,height: 10,type: LineText.TYPE_TEXT, x:10, y:10, content: "Impressora\n"));
+                            list.add(LineText(align:LineText.ALIGN_CENTER ,width: 10,height: 10,type: LineText.TYPE_TEXT, x:10, y:10, content: "Don Fernandó \n"));
+                            list.add(LineText(align:LineText.ALIGN_CENTER ,type: LineText.TYPE_TEXT, x:10, y:10, content: "Impressão\n"));
                             list.add(LineText(align:LineText.ALIGN_CENTER ,type: LineText.TYPE_TEXT, x:10, y:10, content: _device.name+"\n"));
                             list.add(LineText(align:LineText.ALIGN_CENTER ,type: LineText.TYPE_TEXT, x:10, y:10, content: _device.address+"\n\n"));
                             list.add(LineText(align:LineText.ALIGN_CENTER ,underline: 1,type: LineText.TYPE_TEXT, x:10, y:10, content:  DateFormat("dd/MM/yyyy").format(DateTime.now())));

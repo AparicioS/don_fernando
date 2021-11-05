@@ -13,34 +13,16 @@ class TelaCadastroProduto extends StatefulWidget {
 
 class _TelaCadastroProdutoState extends State<TelaCadastroProduto> {
   Produto produto;
-  List<DropdownMenuItem> listaCategoria;
-  List<DropdownMenuItem> listaUnidade;
-  final List<String> _categorias = [
-    'Litro',
-    'Dose',
-    'Lata',
-    'Combo'
-  ];
-  final List<String> _listaUnidade = [
-    'unidade',
-    'lista',
-    'fracionado'
-  ];
 
 
   @override
+  void didChangeDependencies() {
+    produto = ModalRoute.of(context).settings.arguments ?? Produto.novo();
+    super.didChangeDependencies();
+  }
+  @override
   void initState() {
     produto = Produto.novo();
-    listaCategoria = _categorias.map((doc) => DropdownMenuItem<String>(
-                child: Text(doc),
-                value: doc,
-              ))
-          .toList();
-    listaUnidade = _listaUnidade.map((doc) => DropdownMenuItem<String>(
-                child: Text(doc),
-                value: doc,
-              ))
-          .toList();
     super.initState();
   }
 
@@ -65,6 +47,7 @@ class _TelaCadastroProdutoState extends State<TelaCadastroProduto> {
               ),
             ),
             DropdownButtonFormField<String>(
+              value: produto.categoria,
               onSaved: (data) => produto.categoria = data,
               validator: (valor) {
                 if (valor.isEmpty) {
@@ -76,11 +59,12 @@ class _TelaCadastroProdutoState extends State<TelaCadastroProduto> {
                   labelText: "Categoria:",
                   contentPadding: EdgeInsets.all(10),
                   counterStyle: TextStyle(color: Colors.red)),
-              items: listaCategoria,
+              items: Produto.getDropdownMenuCategorias(),
               onChanged: (value) => print("selecionado: $value"),
             ),
             SizedBox(height: 30),
             TextFormField(
+              initialValue: produto.descricao?.toString(),
               onSaved: (valor) => produto.descricao = valor,
               validator: (valor) {
                 if (valor.isEmpty) {
@@ -91,10 +75,12 @@ class _TelaCadastroProdutoState extends State<TelaCadastroProduto> {
               decoration: InputDecoration(labelText: "Nome/Identificação:"),
             ),
             SizedBox(height: 30),
-            TextFormField(
-              inputFormatters: [
-                FilteringTextInputFormatter.deny(RegExp(r'\s')),
+            TextFormField(              
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.allow(new RegExp('[0-9.]'))
               ],
+              initialValue: produto.valor?.toString(),
               onSaved: (valor) => produto.valor= valor,
               validator: (valor) {
                 if (valor.isEmpty) {
@@ -106,6 +92,7 @@ class _TelaCadastroProdutoState extends State<TelaCadastroProduto> {
             ),
             SizedBox(height: 30),            
             DropdownButtonFormField<String>(
+              value: produto.unidade,
               onSaved: (data) => produto.unidade = data,
               validator: (valor) {
                 if (valor.isEmpty) {
@@ -117,7 +104,7 @@ class _TelaCadastroProdutoState extends State<TelaCadastroProduto> {
                   labelText: "Unidade:",
                   contentPadding: EdgeInsets.all(10),
                   counterStyle: TextStyle(color: Colors.red)),
-              items: listaUnidade,
+              items: Produto.getDropdownMenuUnidade(),
               onChanged: (value) => print("selecionado: $value"),
             ),
             SizedBox(height: 30),
@@ -141,6 +128,7 @@ class _TelaCadastroProdutoState extends State<TelaCadastroProduto> {
                       TextButton(
                           onPressed: () {
                             form.currentState.reset();
+                            produto = Produto.novo();
                             Navigator.pop(ctx);
                           },
                           child: Text('Novo cadastro')),

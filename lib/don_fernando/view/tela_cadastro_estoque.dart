@@ -48,6 +48,7 @@ class _TelaCadastroEstuqueState extends State<TelaCadastroEstuque> {
             ],
           ),
           Container(
+            height: MediaQuery.of(context).size.width * 1.2,
             child: ListView.builder(
               shrinkWrap: true,
               itemCount: estoques.length,

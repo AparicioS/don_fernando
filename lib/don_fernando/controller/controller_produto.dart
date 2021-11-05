@@ -8,12 +8,14 @@ class ControllerProduto {
     if (Estabelecimento().id == null) {
       return 'Falha ';
     }
-    
+    if (produto.id == null) {
+      produto.id = (Estabelecimento().produtos.length +1).toString();
+    }
     return FirebaseFirestore.instance
         .collection('Estabelecimento')
         .doc(Estabelecimento().id)
         .collection('Produto')
-        .doc((Estabelecimento().produtos.length +1).toString())
+        .doc(produto.id)
         .set(produto.toMap())
         .then((value) => 'Sucesso ')
         .catchError((erro) => 'Falha ');
@@ -52,9 +54,12 @@ class ControllerProduto {
     List<Produto> produtos = [];
     await FirebaseFirestore.instance.collection('Estabelecimento')
           .doc(Estabelecimento().id)
-          .collection('Produto').get().then((value) {
+          .collection('Produto')
+          .orderBy("categoria")
+          .get().then((value) {
               produtos.addAll(value.docs.map((doc) => Produto.fromDoc(doc)).toList()); 
     });
     return produtos;
+    
   }
 }

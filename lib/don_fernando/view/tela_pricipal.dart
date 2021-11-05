@@ -2,8 +2,8 @@ import 'package:don_fernando/don_fernando/model/estabelecimento.dart';
 import 'package:don_fernando/don_fernando/view/layout.dart';
 import 'package:don_fernando/don_fernando/view/tela_cadastro_estabelecimento.dart';
 import 'package:don_fernando/don_fernando/view/tela_cadastro_estoque.dart';
-import 'package:don_fernando/don_fernando/view/tela_cadastro_produto.dart';
 import 'package:don_fernando/don_fernando/view/tela_conecta_impressora.dart';
+import 'package:don_fernando/don_fernando/view/tela_consulta_produto.dart';
 import 'package:don_fernando/don_fernando/view/tela_ticket.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 class TelaPricipal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Estabelecimento().caregaEstabelecimento("123");
+    Estabelecimento().caregaEstabelecimento("1");
     final sizewidth = MediaQuery.of(context).size.width;
     final sizeheight = (MediaQuery.of(context).size.height -
         (kToolbarHeight + MediaQuery.of(context).padding.top));
@@ -65,7 +65,7 @@ class TelaPricipal extends StatelessWidget {
                       style: TextButton.styleFrom(primary: Cor.texto()),
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (_) => TelaCadastroProduto()));
+                            builder: (_) => TelaConsultaProduto()));
                       },
                       child: Align(
                           alignment: Alignment.bottomCenter,

@@ -11,12 +11,7 @@ class TelaCadastroEstabelecimento extends StatefulWidget {
 }
 
 class _TelaCadastroEstabelecimentoState extends State<TelaCadastroEstabelecimento> {
-  
-  @override
-  void initState() {
-    /* rever nessecidade */
-    super.initState();
-  }
+  bool teste = false;
 
   @override
   Widget build(BuildContext context) {
@@ -64,14 +59,66 @@ class _TelaCadastroEstabelecimentoState extends State<TelaCadastroEstabeleciment
             ),
             SizedBox(height: 30),
             TextFormField(
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
-              ],
               initialValue: Estabelecimento().mensagem ?? '',
               onSaved: (valor) => Estabelecimento().mensagem = valor,
               decoration: InputDecoration(labelText: "Mensagem:"),
             ),
             SizedBox(height: 30),
+            CheckboxListTile(
+                title: Text("Imprimir Nome do Estabelecimento"),
+                value: Estabelecimento().configuracao['estabelecimento']??false,
+                onChanged: (bool value){
+                            setState((){
+                              Estabelecimento().configuracao['estabelecimento']=value;
+                              teste = value;
+                            });
+                          },
+            ),CheckboxListTile(
+                title: Text("Imprimir Categoria do Produto"),
+                value: Estabelecimento().configuracao['categoria']??false,
+                onChanged: (bool value){
+                            setState((){
+                              Estabelecimento().configuracao['categoria']=value;
+                              teste = value;
+                            });
+                          },
+            ),CheckboxListTile(
+                title: Text("Imprimir Descrição do Produto"),
+                value: Estabelecimento().configuracao['produto']??false,
+                onChanged: (bool value){
+                            setState((){
+                              Estabelecimento().configuracao['produto']=value;
+                              teste = value;
+                            });
+                          },
+            ),CheckboxListTile(
+                title: Text("Imprimir Valor do Produto"),
+                value: Estabelecimento().configuracao['valor']??false,
+                onChanged: (bool value){
+                            setState((){
+                              Estabelecimento().configuracao['valor']=value;
+                              teste = value;
+                            });
+                          },
+            ),CheckboxListTile(
+                title: Text("Imprimir Mensagem do Estabelecimento"),
+                value: Estabelecimento().configuracao['mensagem']??false,
+                onChanged: (bool value){
+                            setState((){
+                              Estabelecimento().configuracao['mensagem']=value;
+                              teste = value;
+                            });
+                          },
+            ),CheckboxListTile(
+                title: Text("Imprimir Data "),
+                value: Estabelecimento().configuracao['data']??false,
+                onChanged: (bool value){
+                            setState((){
+                              Estabelecimento().configuracao['data']=value;
+                              teste = value;
+                            });
+                          },
+            ),
           ],
         ),
       ),

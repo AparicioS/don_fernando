@@ -9,7 +9,9 @@ class Estabelecimento {
   String descricao;
   String mensagem;
   String senha;
-  List<Produto> produtos;  
+  List categoria;
+  List<Produto> produtos;
+  Map <String,bool>configuracao = Map();  
 
   resetEstabelecimento() {
     _instance = Estabelecimento._();
@@ -21,6 +23,12 @@ class Estabelecimento {
   }
   
   caregaEstabelecimento(String codigo) async {
+    configuracao['estabelecimento'] = true;
+    configuracao['categoria'] =true;
+    configuracao['produto'] =true;
+    configuracao['valor'] =false;
+    configuracao['mensagem'] =false;
+    configuracao['data'] =true;
     await FirebaseFirestore.instance
         .collection('Estabelecimento')
         .doc(codigo)
@@ -32,6 +40,7 @@ class Estabelecimento {
             descricao = dados['descricao'];
             mensagem = dados['mensagem'];
             senha = dados['senha'];
+            categoria = dados['categoria'];
           }
         });
     await ControllerProduto.buscarProdutos().then((value) => produtos = value);
@@ -42,6 +51,7 @@ class Estabelecimento {
     map['descricao'] = descricao;
     map['mensagem'] = mensagem;
     map['senha'] = senha;
+    map['categoria'] = categoria;
 
     return map;
   }
@@ -53,6 +63,7 @@ class Estabelecimento {
       this.descricao = map['descricao'];
       this.mensagem = map['mensagem'];
       this.senha = map['senha'];
+      this.categoria = map['categoria'];
     }
   }
   Estabelecimento.fromMap(Map<String, dynamic> map) {
@@ -60,6 +71,7 @@ class Estabelecimento {
       this.descricao = map['descricao'];
       this.mensagem = map['mensagem'];
       this.senha = map['senha'];
+      this.categoria = map['categoria'];
     }
   }
 

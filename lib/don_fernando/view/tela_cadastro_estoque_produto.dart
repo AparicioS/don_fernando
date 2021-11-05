@@ -26,7 +26,16 @@ class _TelaCadastroEstoqueProdutoState extends State<TelaCadastroEstoqueProduto>
   @override
   void initState() {
     estoque ??= Estoque.novo();
-    listaProduto = Estabelecimento().produtos.where((element) => element.unidade=='unidade').map((doc) => DropdownMenuItem<String>(
+    listaProduto = Estabelecimento().produtos
+                  .where((element) => element.unidade=='Unidade')
+                  .map((doc) => DropdownMenuItem<String>(
+                child: Text(doc.descricao),
+                value: doc.id,
+              ))
+          .toList();
+    listaProduto = Estabelecimento().produtos
+                  .where((element) => element.unidade=='Unidade')
+                  .map((doc) => DropdownMenuItem<String>(
                 child: Text(doc.descricao),
                 value: doc.id,
               ))

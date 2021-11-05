@@ -1,6 +1,7 @@
 import 'package:bluetooth_print/bluetooth_print_model.dart';
 import 'package:don_fernando/don_fernando/model/estabelecimento.dart';
 import 'package:don_fernando/don_fernando/model/produto.dart';
+import 'package:don_fernando/don_fernando/util/string_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -31,7 +32,7 @@ class Size{
 }
 
 class ScaffoldLayout extends Scaffold {
-  ScaffoldLayout({Widget body, acoes,botoes, floatingActionButton})
+  ScaffoldLayout({Widget body, drawer,acoes,botoes, floatingActionButton})
       : super(
             appBar: AppBar(
               backgroundColor: Cor.cabecario(0.8),
@@ -42,6 +43,7 @@ class ScaffoldLayout extends Scaffold {
               actions: acoes,
               bottom: botoes,
             ),
+            drawer:drawer,
             body: Container(
                 decoration: BoxDecoration(
                   image: DecorationImage(
@@ -92,14 +94,15 @@ class AcaoTopo extends Container {
 class Ticket{
   static List<LineText> getTicket(Produto produto){
     List<LineText> list = [];
-    list.add(LineText(align:LineText.ALIGN_CENTER ,width: 10,height: 10,type: LineText.TYPE_TEXT, x:10, y:10, content: Estabelecimento().descricao+"\n\n"));
-    list.add(LineText(align:LineText.ALIGN_CENTER ,width: 10,height: 10,type: LineText.TYPE_TEXT, x:10, y:10, content: produto.categoria+"\n"));
-    list.add(LineText(align:LineText.ALIGN_CENTER ,width: 10,height: 10,type: LineText.TYPE_TEXT, x:10, y:10, content: produto.descricao+"\n\n"));
-    list.add(LineText(align:LineText.ALIGN_CENTER ,type: LineText.TYPE_TEXT, x:10, y:10, content: Estabelecimento().mensagem+"\n\n"));
-    list.add(LineText(align:LineText.ALIGN_CENTER ,underline: 1,type: LineText.TYPE_TEXT, x:10, y:10, content:  DateFormat("dd/MM/yyyy").format(DateTime.now())));
-    list.add(LineText(type: LineText.TYPE_TEXT, x:10, y:10, content: "\n--------------------------------"));
-    list.add(LineText(type: LineText.TYPE_TEXT, x:10, y:10, content: "\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"));
-    list.add(LineText(type: LineText.TYPE_TEXT, x:10, y:10, content: "\n\n--------------------------------"));
+    list.add(LineText(type: LineText.TYPE_TEXT, x:10, y:10, content: "xxxxxxxxx Don Fernando xxxxxxxxx\n\n"));
+    if(Estabelecimento().configuracao['estabelecimento']) list.add(LineText(align:LineText.ALIGN_CENTER ,width: 10,height: 10,type: LineText.TYPE_TEXT, x:10, y:10, content: StrUtil.removerAcentos( Estabelecimento().descricao)+"\n\n"));
+    if(Estabelecimento().configuracao['categoria']) list.add(LineText(align:LineText.ALIGN_CENTER ,width: 10,height: 10,type: LineText.TYPE_TEXT, x:10, y:10, content: StrUtil.removerAcentos(produto.categoria)+"\n"));
+    if(Estabelecimento().configuracao['produto']) list.add(LineText(align:LineText.ALIGN_CENTER ,width: 10,height: 10,type: LineText.TYPE_TEXT, x:10, y:10, content: StrUtil.removerAcentos(produto.descricao)+"\n\n"));
+    if(Estabelecimento().configuracao['valor']) list.add(LineText(align:LineText.ALIGN_CENTER ,width: 10,height: 10,type: LineText.TYPE_TEXT, x:10, y:10, content: "R\$"+produto.valor+"\n\n"));
+    if(Estabelecimento().configuracao['mensagem']) list.add(LineText(align:LineText.ALIGN_CENTER ,type: LineText.TYPE_TEXT, x:10, y:10, content: StrUtil.removerAcentos(Estabelecimento().mensagem)+"\n"));
+    if(Estabelecimento().configuracao['data']) list.add(LineText(align:LineText.ALIGN_CENTER ,underline: 1,type: LineText.TYPE_TEXT, x:10, y:10, content:  DateFormat("dd/MM/yyyy").format(DateTime.now())));
+    list.add(LineText(type: LineText.TYPE_TEXT, x:10, y:10, content: "\n________________________________\n"));
+    list.add(LineText(type: LineText.TYPE_TEXT, x:10, y:10, content: "--------------------------------\n\n"));
     return list;           
   }
 }
