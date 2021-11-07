@@ -1,4 +1,9 @@
+import 'package:bluetooth_print/bluetooth_print_model.dart';
+import 'package:don_fernando/don_fernando/model/estabelecimento.dart';
+import 'package:don_fernando/don_fernando/model/produto.dart';
+import 'package:don_fernando/don_fernando/util/string_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Cor {
   static Color texto([double opacity = 1]) => Color.fromRGBO(0, 0, 0, opacity);
@@ -9,7 +14,7 @@ class Cor {
   static Color titulo([double opacity = 1]) =>
       Color.fromRGBO(0, 0, 0, opacity);
   static Color cabecario([double opacity = 1]) =>
-      Color.fromRGBO(255, 140, 0, opacity);
+      Color.fromRGBO(240,230,140, opacity);
   static Color backgrud([double opacity = 1]) =>
       Color.fromRGBO(231, 244, 192, opacity);
   static Color botaoverde([double opacity = 1]) =>
@@ -19,18 +24,26 @@ class Cor {
   static Color textoAzul([double opacity = 1]) =>
       Color.fromRGBO(0, 0, 250, opacity);
 }
+class Size{
+  static double sizeTextTitleList = 30;
+  static double sizeTextSubTitleList = 20;
+  static double sizeTextLeadingList = 30;
+  static double sizeTextTrailingList = 30;
+}
 
 class ScaffoldLayout extends Scaffold {
-  ScaffoldLayout({Widget body, acoes, floatingActionButton})
+  ScaffoldLayout({Widget body, drawer,acoes,botoes, floatingActionButton})
       : super(
             appBar: AppBar(
               backgroundColor: Cor.cabecario(0.8),
               title: Center(
-                child: Text('Kaj Pub',
+                child: Text('Don Fernando',
                     style: TextStyle(color: Cor.titulo(), fontSize: 30)),
               ),
               actions: acoes,
+              bottom: botoes,
             ),
+            drawer:drawer,
             body: Container(
                 decoration: BoxDecoration(
                   image: DecorationImage(
@@ -77,4 +90,19 @@ class AcaoTopo extends Container {
                 onPressed: onPressed),
           ),
         );
+}
+class Ticket{
+  static List<LineText> getTicket(Produto produto){
+    List<LineText> list = [];
+    list.add(LineText(type: LineText.TYPE_TEXT, x:10, y:10, content: "xxxxxxxxx Don Fernando xxxxxxxxx\n\n"));
+    if(Estabelecimento().configuracao['estabelecimento']) list.add(LineText(align:LineText.ALIGN_CENTER ,width: 10,height: 10,type: LineText.TYPE_TEXT, x:10, y:10, content: StrUtil.removerAcentos( Estabelecimento().descricao)+"\n\n"));
+    if(Estabelecimento().configuracao['categoria']) list.add(LineText(align:LineText.ALIGN_CENTER ,width: 10,height: 10,type: LineText.TYPE_TEXT, x:10, y:10, content: StrUtil.removerAcentos(produto.categoria)+"\n"));
+    if(Estabelecimento().configuracao['produto']) list.add(LineText(align:LineText.ALIGN_CENTER ,width: 10,height: 10,type: LineText.TYPE_TEXT, x:10, y:10, content: StrUtil.removerAcentos(produto.descricao)+"\n\n"));
+    if(Estabelecimento().configuracao['valor']) list.add(LineText(align:LineText.ALIGN_CENTER ,width: 10,height: 10,type: LineText.TYPE_TEXT, x:10, y:10, content: "R\$"+produto.valor+"\n\n"));
+    if(Estabelecimento().configuracao['mensagem']) list.add(LineText(align:LineText.ALIGN_CENTER ,type: LineText.TYPE_TEXT, x:10, y:10, content: StrUtil.removerAcentos(Estabelecimento().mensagem)+"\n"));
+    if(Estabelecimento().configuracao['data']) list.add(LineText(align:LineText.ALIGN_CENTER ,underline: 1,type: LineText.TYPE_TEXT, x:10, y:10, content:  DateFormat("dd/MM/yyyy").format(DateTime.now())));
+    list.add(LineText(type: LineText.TYPE_TEXT, x:10, y:10, content: "\n________________________________\n"));
+    list.add(LineText(type: LineText.TYPE_TEXT, x:10, y:10, content: "--------------------------------\n\n"));
+    return list;           
+  }
 }

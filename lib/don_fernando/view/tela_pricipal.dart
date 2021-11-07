@@ -1,27 +1,41 @@
+import 'package:don_fernando/don_fernando/model/estabelecimento.dart';
 import 'package:don_fernando/don_fernando/view/layout.dart';
 import 'package:don_fernando/don_fernando/view/tela_cadastro_estabelecimento.dart';
 import 'package:don_fernando/don_fernando/view/tela_cadastro_estoque.dart';
-import 'package:don_fernando/don_fernando/view/tela_cadastro_produto.dart';
+import 'package:don_fernando/don_fernando/view/tela_conecta_impressora.dart';
+import 'package:don_fernando/don_fernando/view/tela_consulta_produto.dart';
+import 'package:don_fernando/don_fernando/view/tela_ticket.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class TelaPricipal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Estabelecimento().caregaEstabelecimento("1");
     final sizewidth = MediaQuery.of(context).size.width;
     final sizeheight = (MediaQuery.of(context).size.height -
         (kToolbarHeight + MediaQuery.of(context).padding.top));
     final double _imagemWidthSize = sizewidth * 0.5;
     final double _imagemHeightSize = sizeheight * 0.20;
     final double _fonteSize = 20;
-
     return ScaffoldLayout(
       body: Column(
         children: [
           AcaoTopo(
-              icone: Icons.logout,
-              texto: 'sair',
-              onPressed: () => {}),
+              icone: Icons.print,
+              texto: 'impressora',
+              onPressed: () => {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (_) => TelaConectaImpressora()))}),
+            Container(
+              padding: EdgeInsets.only(left: 15),
+              alignment: Alignment.topLeft,
+              child: Title(
+                  color: Cor.titulo(),
+                  child: Text(Estabelecimento().descricao ??"",
+                    style: TextStyle(fontSize: 20),
+                  )),
+            ),
           Container(
             child: Expanded(
               child: GridView.count(
@@ -51,7 +65,7 @@ class TelaPricipal extends StatelessWidget {
                       style: TextButton.styleFrom(primary: Cor.texto()),
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (_) => TelaCadastroProduto()));
+                            builder: (_) => TelaConsultaProduto()));
                       },
                       child: Align(
                           alignment: Alignment.bottomCenter,
@@ -91,7 +105,7 @@ class TelaPricipal extends StatelessWidget {
                       style: TextButton.styleFrom(primary: Cor.texto()),
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (_) => TelaCadastroEstuque()));
+                            builder: (_) => TelaTicket()));
                       },
                       child: Align(
                           alignment: Alignment.bottomCenter,
@@ -113,8 +127,6 @@ class TelaPricipal extends StatelessWidget {
           ),
         ],
       ),
-      // ),
-      // ],
     );
   }
 }
