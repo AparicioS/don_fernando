@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 class TelaPricipal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Estabelecimento().caregaEstabelecimento("1");
+    Estabelecimento().caregaEstabelecimento("teste");
     final sizewidth = MediaQuery.of(context).size.width;
     final sizeheight = (MediaQuery.of(context).size.height -
         (kToolbarHeight + MediaQuery.of(context).padding.top));
