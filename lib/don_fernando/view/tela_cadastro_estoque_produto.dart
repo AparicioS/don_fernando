@@ -1,12 +1,12 @@
 
 import 'package:bluetooth_print/bluetooth_print.dart';
 import 'package:don_fernando/don_fernando/controller/controller_estoque.dart';
+import 'package:don_fernando/don_fernando/controller/controller_produto.dart';
 import 'package:don_fernando/don_fernando/model/estabelecimento.dart';
 import 'package:don_fernando/don_fernando/model/estoque.dart';
 import 'package:don_fernando/don_fernando/view/layout.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class TelaCadastroEstoqueProduto extends StatefulWidget {
   @override
@@ -26,23 +26,18 @@ class _TelaCadastroEstoqueProdutoState extends State<TelaCadastroEstoqueProduto>
   @override
   void initState() {
     estoque ??= Estoque.novo();
-    listaProduto = Estabelecimento().produtos
-                  .where((element) => element.unidade=='Unidade')
-                  .map((doc) => DropdownMenuItem<String>(
-                child: Text(doc.descricao),
-                value: doc.id,
-              ))
-          .toList();
-    listaProduto = Estabelecimento().produtos
-                  .where((element) => element.unidade=='Unidade')
-                  .map((doc) => DropdownMenuItem<String>(
-                child: Text(doc.descricao),
-                value: doc.id,
-              ))
-          .toList();
+    carregarEstoque();
     super.initState();
   }
-
+  carregarEstoque() {    
+    listaProduto = Estabelecimento().produtos
+                  .where((element) => element.unidade=='Unidade')
+                  .map((doc) => DropdownMenuItem<String>(
+                child: Text(doc.descricao),
+                value: doc.id,
+              ))
+          .toList();
+  }
   @override
   Widget build(BuildContext context) {
     var form = GlobalKey<FormState>();
@@ -100,6 +95,9 @@ class _TelaCadastroEstoqueProdutoState extends State<TelaCadastroEstoqueProduto>
             if (form.currentState.validate()) {
               form.currentState.save();
               var retorno = await ControllerEstoque.cadastrarEstoque(estoque);
+              setState(() {                
+                ControllerProduto.buscarProdutos().then((value) => Estabelecimento().produtos = value);
+              });
               print(retorno);
               showDialog(
                 context: context,

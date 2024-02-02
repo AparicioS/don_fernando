@@ -1,5 +1,6 @@
 
 import 'package:don_fernando/don_fernando/controller/controller_produto.dart';
+import 'package:don_fernando/don_fernando/model/estabelecimento.dart';
 import 'package:don_fernando/don_fernando/model/produto.dart';
 import 'package:don_fernando/don_fernando/view/layout.dart';
 import 'package:flutter/cupertino.dart';
@@ -117,6 +118,9 @@ class _TelaCadastroProdutoState extends State<TelaCadastroProduto> {
             if (form.currentState.validate()) {
               form.currentState.save();
               var retorno = await ControllerProduto.cadastrarProduto(produto);
+              setState(() {                
+                ControllerProduto.buscarProdutos().then((value) => Estabelecimento().produtos = value);
+              });
               print(retorno);
               showDialog(
                 context: context,
