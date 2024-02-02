@@ -3,7 +3,6 @@ import 'package:bluetooth_print/bluetooth_print.dart';
 import 'package:bluetooth_print/bluetooth_print_model.dart';
 import 'package:don_fernando/don_fernando/model/estabelecimento.dart';
 import 'package:don_fernando/don_fernando/view/layout.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

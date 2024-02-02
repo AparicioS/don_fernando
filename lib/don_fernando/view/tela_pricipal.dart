@@ -5,13 +5,52 @@ import 'package:don_fernando/don_fernando/view/tela_cadastro_estoque.dart';
 import 'package:don_fernando/don_fernando/view/tela_conecta_impressora.dart';
 import 'package:don_fernando/don_fernando/view/tela_consulta_produto.dart';
 import 'package:don_fernando/don_fernando/view/tela_ticket.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class TelaPricipal extends StatelessWidget {
+class TelaPricipal extends StatefulWidget {
+  @override
+  _TelaPricipalState createState() => _TelaPricipalState();
+}
+
+class _TelaPricipalState extends State<TelaPricipal> {
+    String _valorParametro = "1";
+
+  @override
+  void initState() {
+    super.initState();
+    //_mostrarDialogoInput();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Codigo do estabelecimento'),
+          content: TextField(
+            onChanged: (value) {
+              setState(() {
+                _valorParametro = value;
+              });
+            },
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Estabelecimento().caregaEstabelecimento(_valorParametro);
+                Navigator.of(context).pop();
+                // Aqui você pode carregar os dados usando o valor do parâmetro
+                // _valorParametro
+              },
+            ),
+          ],
+        );
+      },
+    );
+    });
+  }
   @override
   Widget build(BuildContext context) {
-    Estabelecimento().caregaEstabelecimento("teste");
+    Estabelecimento().caregaEstabelecimento(_valorParametro);
     final sizewidth = MediaQuery.of(context).size.width;
     final sizeheight = (MediaQuery.of(context).size.height -
         (kToolbarHeight + MediaQuery.of(context).padding.top));

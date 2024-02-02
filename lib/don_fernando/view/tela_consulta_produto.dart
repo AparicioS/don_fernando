@@ -2,7 +2,6 @@ import 'package:don_fernando/don_fernando/model/estabelecimento.dart';
 import 'package:don_fernando/don_fernando/model/produto.dart';
 import 'package:don_fernando/don_fernando/view/layout.dart';
 import 'package:don_fernando/don_fernando/view/tela_cadastro_produto.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class TelaConsultaProduto extends StatefulWidget {
@@ -17,12 +16,18 @@ class _TelaConsultaProdutoState extends State<TelaConsultaProduto> {
   String _categoria = "Todas";  
 
   @override
-  void initState() {    
-    produtos = Estabelecimento().produtos;
-    produtoTodos = produtos;
+  void initState() { 
+    carregarProdutos();   
     categorias = Estabelecimento().categoria;
     super.initState();
   }
+carregarProdutos() {
+  setState(() {
+    produtos = Estabelecimento().produtos;
+    produtoTodos = produtos;
+    
+  });
+}    
 carregarCategorias() {    
     List lista = categorias.where((element) => element != _categoria).toList();
     lista.add("Todas"); 
@@ -95,7 +100,7 @@ carregarCategorias() {
       floatingActionButton: BotaoRodape(
           onPressed: () {
             Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => TelaCadastroProduto()));
+                MaterialPageRoute(builder: (_) => TelaCadastroProduto())).then((value) => carregarProdutos());
           },
           child: Text("Novo")),
     );

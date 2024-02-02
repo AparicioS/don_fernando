@@ -4,6 +4,7 @@ import 'package:don_fernando/don_fernando/view/layout.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:don_fernando/don_fernando/util/string_utils.dart';
 
 class TelaCadastroEstabelecimento extends StatefulWidget {
   @override
@@ -12,6 +13,7 @@ class TelaCadastroEstabelecimento extends StatefulWidget {
 
 class _TelaCadastroEstabelecimentoState extends State<TelaCadastroEstabelecimento> {
   bool teste = false;
+  var nomeCategoria = '';
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,74 @@ class _TelaCadastroEstabelecimentoState extends State<TelaCadastroEstabeleciment
       body: Form(
         key: form,
         child: ListView(
-          children: [
+          children: [AcaoTopo(
+          texto: 'Cadastrar categoria',
+          onPressed: (){            
+              showDialog(
+                context: context,
+                builder: (ctx) {
+                  return CupertinoAlertDialog(
+                    title: Text('Categoria'),
+                    content: Card(
+                      child: TextField(
+                                  onChanged: (value) => nomeCategoria = value,                                  
+                                  decoration: InputDecoration(labelText: "Nome:"),
+                                ),
+                    ),
+                    actions: [
+                      TextButton(
+                          onPressed: () { 
+                            Navigator.pop(ctx); },
+                          child: Text('Voltar')),
+                      TextButton(
+                        child: Text("Salvar"),
+                        onPressed: () async {
+                          if(nomeCategoria != ''){
+                            if(!StrUtil.contem(Estabelecimento().categoria,nomeCategoria)){
+                              Estabelecimento().categoria.add(nomeCategoria.trim());
+                              if (form.currentState.validate()) {
+                                form.currentState.save();
+                                print(Estabelecimento().categoria.toString());
+                                var retorno = await ControllerEstabelecimento.cadastrarEstabelecimento(Estabelecimento());              
+                                Navigator.pop(context);
+                                showDialog(
+                                    context: context,
+                                    builder: (contx) {
+                                      return CupertinoAlertDialog(
+                                        title: Text('Categoria'),
+                                        content: Text(retorno),
+                                        actions: [
+                                          TextButton(
+                                              onPressed: () => Navigator.pop(contx),
+                                              child: Text('OK'))
+                                        ],
+                                      );
+                                    });
+                              } 
+                            }else {
+                              showDialog(
+                                context: context,
+                                builder: (contx) {
+                                  return CupertinoAlertDialog(
+                                    title: Text('Estabelecimento'),
+                                    content: Text('Categoria ja cadastrada'),
+                                    actions: [
+                                      TextButton(
+                                          onPressed: () => Navigator.pop(contx),
+                                          child: Text('OK'))
+                                    ],
+                                  );
+                                });
+                            }
+                          }
+                        }
+                        )
+                    ],
+                  );
+                }
+              );
+          },
+      ),
             SizedBox(
               height: 60,
               child: Center(

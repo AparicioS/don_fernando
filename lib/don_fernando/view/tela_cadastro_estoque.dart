@@ -2,7 +2,6 @@ import 'package:don_fernando/don_fernando/controller/controller_estoque.dart';
 import 'package:don_fernando/don_fernando/model/estoque.dart';
 import 'package:don_fernando/don_fernando/view/layout.dart';
 import 'package:don_fernando/don_fernando/view/tela_cadastro_estoque_produto.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class TelaCadastroEstuque extends StatefulWidget {
@@ -15,13 +14,15 @@ class _TelaCadastroEstuqueState extends State<TelaCadastroEstuque> {
 
   @override
   void initState() {    
-    
+    carregarEstoque();    
+    super.initState();
+  }
+  
+  carregarEstoque() {        
     ControllerEstoque.buscarEstoques()
     .then((value) => setState(() {
         estoques = value;
     }));
-    
-    super.initState();
   }
 
   @override
@@ -74,7 +75,7 @@ class _TelaCadastroEstuqueState extends State<TelaCadastroEstuque> {
       floatingActionButton: BotaoRodape(
           onPressed: () {
             Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => TelaCadastroEstoqueProduto()));
+                MaterialPageRoute(builder: (_) => TelaCadastroEstoqueProduto())).then((value) => carregarEstoque());
           },
           child: Text("Novo")),
     );
